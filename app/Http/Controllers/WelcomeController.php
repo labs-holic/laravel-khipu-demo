@@ -54,7 +54,10 @@ class WelcomeController extends Controller {
 		$payments = new Khipu\Client\PaymentsApi($client);
 
 		try {
-		    $order = new Order(1000, 'Ejemplo de compra');
+		    $order = new Order();
+			$order->amount = 1000;
+			$order->description = 'Ejemplo de compra';
+			$order->save();
 		    $expires_date = new DateTime();
 		    $expires_date->setDate(2016, 4, 4);
 		    $response = $payments->paymentsPost($order->description
@@ -84,6 +87,7 @@ class WelcomeController extends Controller {
 	 */
 	public function callback(Request $request)
 	{
+		dd( $request );
 		$api_version = $request->api_version;  // Parámetro api_version
 		$notification_token = $request->notification_token; //Parámetro notification_token
 
@@ -100,7 +104,7 @@ class WelcomeController extends Controller {
 		        $response = $payments->paymentsGet($notification_token);
 		        if ($response->getReceiverId() == $receiver_id) {
 		            if ($response->getStatus() == 'done') {
-		                $order = getOrder($response->getTransactionId());
+		                $order = Order::findOrFail($response->getTransactionId());
 		                if ($order != null && isValid($order, $response)) {
 		                    $order->status = 5;
 							$order->save();

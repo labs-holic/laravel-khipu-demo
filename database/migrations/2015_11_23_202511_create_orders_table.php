@@ -16,6 +16,7 @@ class CreateOrdersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('amount');
+			$table->string('description');
 			$table->integer('status')->default(0);
 			$table->timestamps();
 		});
