@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 
 use Khipu;
+use DateTime;
 use App\Order;
 
 class WelcomeController extends Controller {
@@ -74,7 +75,7 @@ class WelcomeController extends Controller {
 		        , '1.3'
 		        , $expires_date
 		    );
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 		    echo $e->getMessage();
 		}
 		return view('welcome');
