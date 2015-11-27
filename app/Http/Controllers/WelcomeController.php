@@ -68,17 +68,16 @@ class WelcomeController extends Controller {
 		        , null
 		        , 'Descripción de la compra'
 		        , null
-		        , env('KHIBU_URL_RETURN')
-		        , env('KHIBU_URL_CANCEL')
-		        , env('KHIBU_URL_PICTURE')
-		        , env('KHIBU_URL_NOTIFY')
+		        , env('KHIPU_URL_RETURN')
+		        , env('KHIPU_URL_CANCEL')
+		        , env('KHIPU_URL_PICTURE')
+		        , env('KHIPU_URL_NOTIFY')
 		        , '1.3'
 		        , $expires_date
 		    );
 		} catch (\Exception $e) {
 		    echo $e->getMessage();
 		}
-		return view('welcome');
 	}
 
 	/**
@@ -88,7 +87,6 @@ class WelcomeController extends Controller {
 	 */
 	public function callback(Request $request)
 	{
-		dd( $request );
 		$api_version = $request->api_version;  // Parámetro api_version
 		$notification_token = $request->notification_token; //Parámetro notification_token
 

@@ -35,8 +35,8 @@ return [
 	],
 
 	'khipu' => [
-		'debt_collector_id'  => env('KHIBU_DEBT_COLLECTOR_ID'),
-		'secret' => env('KHIBU_SECRET'),
+		'debt_collector_id'  => env('KHIPU_DEBT_COLLECTOR_ID'),
+		'secret' => env('KHIPU_SECRET'),
 	],
 
 ];
