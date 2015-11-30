@@ -87,38 +87,52 @@ class WelcomeController extends Controller {
 	 */
 	public function callback(Request $request)
 	{
-		$api_version = $request->api_version;  // Parámetro api_version
-		$notification_token = $request->notification_token; //Parámetro notification_token
-
-		try {
-		    if ($api_version == '1.3') {
-		        $configuration = new Khipu\Configuration();
-		        $configuration->setSecret( config('services.khipu.secret') );
-		        $configuration->setReceiverId( config('services.khipu.debt_collector_id') );
-		        $configuration->setDebug(true);
-
-		        $client = new Khipu\ApiClient($configuration);
-		        $payments = new Khipu\Client\PaymentsApi($client);
-
-		        $response = $payments->paymentsGet($notification_token);
-		        if ($response->getReceiverId() == $receiver_id) {
-		            if ($response->getStatus() == 'done') {
-		                $order = Order::findOrFail($response->getTransactionId());
-		                if ($order != null && isValid($order, $response)) {
-		                    $order->status = 5;
-							$order->save();
-		                }
-		            }
-		        } else {
-		            // receiver_id no coincide
-		        }
-		    } else {
-		        // Usar versión anterior de la API de notificación
-		    }
-		} catch (Khipu\ApiException $exception) {
-		    print_r($exception->getResponseObject());
-		}
-		//return view('welcome');
+		dd($request);
 	}
+
+	/**
+	 * Callback on notify on kiphu
+	 *
+	 */
+	 public function notify(Request $request)
+	 {
+		$api_version = $request->api_version;  // Parámetro api_version
+ 		$notification_token = $request->notification_token; //Parámetro notification_token
+		$order = new Order();
+		$order->amount = 0;
+		$order->description = json_encode((array) $request->all());
+		$order->status = 1;
+		$order->save();
+
+ 		try {
+ 		    if ($api_version == '1.3') {
+ 		        $configuration = new Khipu\Configuration();
+ 		        $configuration->setSecret( config('services.khipu.secret') );
+ 		        $configuration->setReceiverId( config('services.khipu.debt_collector_id') );
+ 		        $configuration->setDebug(true);
+
+ 		        $client = new Khipu\ApiClient($configuration);
+ 		        $payments = new Khipu\Client\PaymentsApi($client);
+
+ 		        $response = $payments->paymentsGet($notification_token);
+ 		        if ($response->getReceiverId() == $receiver_id) {
+ 		            if ($response->getStatus() == 'done') {
+ 		                $order = Order::findOrFail($response->getTransactionId());
+ 		                if ($order != null && isValid($order, $response)) {
+ 		                    $order->status = 5;
+ 							$order->save();
+ 		                }
+ 		            }
+ 		        } else {
+ 		            // receiver_id no coincide
+ 		        }
+ 		    } else {
+ 		        // Usar versión anterior de la API de notificación
+ 		    }
+ 		} catch (Khipu\ApiException $exception) {
+ 		    print_r($exception->getResponseObject());
+ 		}
+ 		//return view('welcome');
+	 }
 
 }
