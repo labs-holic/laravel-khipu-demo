@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 
 use Khipu;
+use Khipu\Model\BanksResponse;
 use DateTime;
 use App\Order;
 
@@ -98,11 +99,9 @@ class WelcomeController extends Controller {
 	 {
 		$api_version = $request->api_version;  // Parámetro api_version
  		$notification_token = $request->notification_token; //Parámetro notification_token
-		$order = new Order();
-		$order->amount = 0;
-		$order->description = json_encode($request->all());
-		$order->status = 1;
-		$order->save();
+		$r = new KhipuResponse();
+		$r->response = json_encode($request->all());
+		$r->save();
 
  		try {
  		    if ($api_version == '1.3') {
@@ -115,10 +114,13 @@ class WelcomeController extends Controller {
  		        $payments = new Khipu\Client\PaymentsApi($client);
 
  		        $response = $payments->paymentsGet($notification_token);
+				$r = new KhipuResponse();
+				$r->response = json_encode((array) $response);
+				$r->save();
  		        if ($response->getReceiverId() == $configuration->getReceiverId()) {
  		            if ($response->getStatus() == 'done') {
  		                $order = Order::findOrFail($response->getTransactionId());
- 		                if ($order != null && isValid($order, $response)) {
+ 		                if ($order != null ) {
  		                    $order->status = 5;
  							$order->save();
  		                }
