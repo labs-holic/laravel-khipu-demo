@@ -100,7 +100,7 @@ class WelcomeController extends Controller {
  		$notification_token = $request->notification_token; //Parámetro notification_token
 		$order = new Order();
 		$order->amount = 0;
-		$order->description = json_encode((array) $request->all());
+		$order->description = json_encode($request->all());
 		$order->status = 1;
 		$order->save();
 

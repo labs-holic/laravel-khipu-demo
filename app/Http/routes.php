@@ -15,7 +15,7 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('/backend/khipu', 'WelcomeController@pay');
 Route::get('/backend/callback', 'WelcomeController@callback');
-Route::get('/backend/notify', 'WelcomeController@notify');
+Route::post('/backend/notify', 'WelcomeController@notify');
 
 Route::get('home', 'HomeController@index');
 
