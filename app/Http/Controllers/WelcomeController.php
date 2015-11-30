@@ -115,7 +115,7 @@ class WelcomeController extends Controller {
  		        $payments = new Khipu\Client\PaymentsApi($client);
 
  		        $response = $payments->paymentsGet($notification_token);
- 		        if ($response->getReceiverId() == $receiver_id) {
+ 		        if ($response->getReceiverId() == $configuration->getReceiverId()) {
  		            if ($response->getStatus() == 'done') {
  		                $order = Order::findOrFail($response->getTransactionId());
  		                if ($order != null && isValid($order, $response)) {
