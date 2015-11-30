@@ -6,6 +6,7 @@ use Khipu;
 use Khipu\Model\BanksResponse;
 use DateTime;
 use App\Order;
+use App\KhipuResponse;
 
 class WelcomeController extends Controller {
 
